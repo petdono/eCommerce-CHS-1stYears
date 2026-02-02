@@ -1,12 +1,7 @@
-from flask import Blueprint, render_template, abort
-from jinja2 import TemplateNotFound
+from flask import Flask
+from main import main
+from auth import auth
 
-simple_page = Blueprint('simple_page', __name__, template_folder='templates')
-
-@simple_page.route('/', defaults={'page': 'index'})
-@simple_page.route('/<page>')
-def show(page):
-    try:
-        return render_template(f'pages/{page}.html')
-    except TemplateNotFound:
-        abort(404)
+app = Flask(__name__)
+app.register_blueprint(main, url_prefix='/')
+app.register_blueprint(auth, url_prefix='/auth')
